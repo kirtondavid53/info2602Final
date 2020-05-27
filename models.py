@@ -32,6 +32,7 @@ class User(UserMixin, db.Model):
         return '<User {}>'.format(self.username)
 
 class UserReact(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     postid = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     react = db.Column(db.String(80), unique=True, nullable=False)
@@ -40,11 +41,11 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     text = db.Column(db.String(80), unique=True, nullable=False)
-    reacts = db.relationship('UserReact', backref='post', lazy=True, cascade="all, delete-orphan") #not sure yet
+    reacts = db.relationship('UserReact', backref='post', lazy=True)
     
     def toDict(self):
         return{
             'id': self.id,
             'text': self.text,
-            'react': self.created.strftime("%m/%d/%Y, %H:%M:%S")
+            'reacts': self.reacts
         }

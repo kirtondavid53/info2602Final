@@ -6,7 +6,7 @@ from flask_jwt import JWT, jwt_required, current_identity
 from sqlalchemy.exc import IntegrityError
 from datetime import timedelta 
 
-from models import db, Logs, User #add application models
+from models import db, User , Post, UserReact#add application models
 from forms import LogIn
 ''' Begin boilerplate code '''
 

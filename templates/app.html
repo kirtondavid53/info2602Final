@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
-{% block title %}Backend App{% endblock %}
-{% block page %}Backend App{% endblock %}
+{% block title %}POST{% endblock %}
+{% block page %}POST{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-    <h1>This view is partially rendered on the server using jinja</h1>
+    <h1>Welcome {{ current_user.username }}</h1>
     <h2>It must be dynamically served</h2>
 {% endblock %}
