@@ -1,7 +1,9 @@
 {% extends "layout.html" %}
 {% block title %}POST{% endblock %}
 {% block page %}POST{% endblock %}
+{% block style %}
 
+{% endblock %}
 {{ super() }}
 
 {% block content %}
@@ -20,25 +22,41 @@
             </form>
           </div>
         </div>
-        
         <ul class="collection with-header" id="result">
             {% if current_user.is_authenticated %}
                 {% for post in posts %}
-                     <li class="card collection-item col s12 m4">
+                    <li class="card collection-item col s12 m4">
                         <form id="todoForm{{post.id}}" class="card-content">
                           <span class="card-title">Author: {{post.user.username}}
                             <p> {{post.text}} </p>                          
                         </form>
-                        {% if current_user.username == post.user.username %}
-                          <div class="card-action right-align">
-                            <a href="/deletePost/{{post.id}}">DELETE</a>
+                        
+                          
+                        
+                            <br/>
+                            <div class="row">
+                              
+                              <form name="react" id="react" method="POST" action="">  
+                            <div class="input-field s6 col s3">
+                              <select class="browser-default waves-effect waves-light btn">
+                                <option value="">Like or dislike</option>
+                                <option value="like">Like</option>
+                                <option value="dislike">Dislike</option>
+                              </select>
+                              </form>
+                            </div>
+                              
+                            {% if current_user.username == post.user.username %}
+                            <div class="col s3">
+                              <a class="btn" href="/deletePost/{{post.id}}">DELETE</a>
+                            </div>
+                          {% endif %}
                           </div>
-                        {% endif %}
                         
                 {% endfor %}
             {% endif %}
-        </ul>
-        
+        </ul>  
     </main>
     
+
 {% endblock %}

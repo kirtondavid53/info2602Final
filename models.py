@@ -49,3 +49,6 @@ class Post(db.Model):
             'text': self.text,
             'reacts': self.reacts
         }
+        
+    def getTotalLikes():
+        pass
