@@ -6,15 +6,15 @@ from flask_jwt import JWT, jwt_required, current_identity
 from sqlalchemy.exc import IntegrityError
 from datetime import timedelta 
 
-from models import db, Logs #add application models
+from models import db, Logs, User #add application models
 from forms import LogIn
 ''' Begin boilerplate code '''
 
 ''' Begin Flask Login Functions '''
-# login_manager = LoginManager()
-# @login_manager.user_loader
-# def load_user(user_id):
-#     return User.query.get(user_id)
+login_manager = LoginManager()
+@login_manager.user_loader
+def load_user(user_id):
+  return User.query.get(user_id)
 
 ''' End Flask Login Functions '''
 
@@ -25,7 +25,7 @@ def create_app():
   app.config['SECRET_KEY'] = "MYSECRET"
 #   app.config['JWT_EXPIRATION_DELTA'] = timedelta(days = 7) # uncomment if using flsk jwt
   CORS(app)
-#   login_manager.init_app(app) # uncomment if using flask login
+  login_manager.init_app(app) # uncomment if using flask login
   db.init_app(app)
   return app
 
@@ -46,12 +46,23 @@ app.app_context().push()
 # jwt = JWT(app, authenticate, identity)
 ''' End JWT Setup '''
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
   form = LogIn()
-  return render_template('index.html',form=form)
+  if form.validate_on_submit(): # respond to form submission
+    data = request.form
+    user = User.query.filter_by(username = data['username']).first()
+    if user and user.check_password(data['password']): # check credentials
+      flash('Logged in successfully.') # send message to next page
+      login_user(user) # login the user
+      return redirect(url_for('client_app')) # redirect to main page if login successful
+    else:
+      flash('Invalid username or password') # send message to next page
+      return redirect(url_for('index')) # redirect to login page if login unsuccessful
+  return render_template('index.html', form=form)
 
 @app.route('/app')
+@login_required
 def client_app():
   return app.send_static_file('app.html')
 
