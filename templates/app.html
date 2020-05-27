@@ -5,6 +5,34 @@
 {{ super() }}
 
 {% block content %}
-    <h1>Welcome {{ current_user.username }}</h1>
-    <h2>It must be dynamically served</h2>
+    <h1 class="center-align">Welcome {{ current_user.username }}</h1>
+    <main class="container">
+
+        <div class="card" >
+          <div class="card-content">
+            <span class="card-title">Create Post</span>
+            <form name="addForm" method="POST" action="/createPost">
+              <div class="input-field">
+                <input type="text" name="text" placeholder="enter to-do" class="materialize-textarea"></textarea>
+                <label for="text">Enter a Post</label>
+              </div>
+              <input class="btn blue white-text" type="submit" value="POST" />
+            </form>
+          </div>
+        </div>
+        
+        <ul class="collection with-header" id="result">
+            {% if current_user.is_authenticated %}
+                {% for post in posts %}
+                     <li class="card collection-item col s12 m4">
+                        <form id="todoForm{{post.id}}" class="card-content">
+                          <span class="card-title">{{post.text}}
+                            
+                        </form>
+    
+                {% endfor %}
+            {% endif %}
+        </ul>
+        
+    </main>
 {% endblock %}

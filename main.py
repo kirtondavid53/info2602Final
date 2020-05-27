@@ -61,10 +61,22 @@ def index():
       return redirect(url_for('index')) # redirect to login page if login unsuccessful
   return render_template('index.html', form=form)
 
-@app.route('/app')
+@app.route('/app', methods=['GET'])
 @login_required
 def client_app():
-  return app.send_static_file('app.html')
+  posts = posts=  Post.query.filter_by(userid=current_user.id).all()
+  return render_template('app.html', posts=posts)
+
+@app.route('/createPost', methods=['POST'])
+@login_required
+def create_post():
+  data = request.form
+  post = Post(text=data['text'], userid=current_user.id)
+  db.session.add(post)
+  db.session.commit()
+  flash('Created')
+  return redirect(url_for('client_app'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

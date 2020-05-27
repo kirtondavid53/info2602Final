@@ -35,12 +35,12 @@ class UserReact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     postid = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    react = db.Column(db.String(80), unique=True, nullable=False)
+    react = db.Column(db.String(80), unique=True, nullable=True)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    text = db.Column(db.String(80), unique=True, nullable=False)
+    text = db.Column(db.String(255), nullable=False)
     reacts = db.relationship('UserReact', backref='post', lazy=True)
     
     def toDict(self):
