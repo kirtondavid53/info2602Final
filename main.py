@@ -64,8 +64,13 @@ def index():
 @app.route('/app', methods=['GET'])
 @login_required
 def client_app():
-  posts = posts=  Post.query.filter_by(userid=current_user.id).all()
+  
+  users = User.query.all()
+  for user in users:
+   posts = Post.query.filter_by().all()
+   
   return render_template('app.html', posts=posts)
+
 
 @app.route('/createPost', methods=['POST'])
 @login_required
@@ -77,6 +82,16 @@ def create_post():
   flash('Created')
   return redirect(url_for('client_app'))
 
+@app.route('/deletePost/<id>', methods=["GET"])
+@login_required
+def delete_post(id):
+  post = Post.query.filter_by(userid=current_user.id, id=id).first()
+  if post == None:
+    flash ('Invalid id or unauthorized')
+  db.session.delete(post) # delete the object
+  db.session.commit()
+  flash ('Deleted!')
+  return redirect(url_for('client_app'))
 
 if __name__ == '__main__':
     app.run(debug=True)

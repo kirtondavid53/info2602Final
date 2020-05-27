@@ -26,13 +26,19 @@
                 {% for post in posts %}
                      <li class="card collection-item col s12 m4">
                         <form id="todoForm{{post.id}}" class="card-content">
-                          <span class="card-title">{{post.text}}
-                            
+                          <span class="card-title">Author: {{post.user.username}}
+                            <p> {{post.text}} </p>                          
                         </form>
-    
+                        {% if current_user.username == post.user.username %}
+                          <div class="card-action right-align">
+                            <a href="/deletePost/{{post.id}}">DELETE</a>
+                          </div>
+                        {% endif %}
+                        
                 {% endfor %}
             {% endif %}
         </ul>
         
     </main>
+    
 {% endblock %}
