@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    #todos = db.relationship('Todo', backref='user', lazy=True) # sets up a relationship to todos which references User
+    posts = db.relationship('Post', backref='user', lazy=True) # sets up a relationship to todos which references User
 
     def toDict(self):
       return {
@@ -31,16 +31,20 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
-class Logs(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    studentId =  db.Column(db.Integer, nullable=False)
-    stream = db.Column(db.Integer, nullable=False)
-    created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+class UserReact(db.Model):
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    postid = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    react = db.Column(db.String(80), unique=True, nullable=False)
 
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    text = db.Column(db.String(80), unique=True, nullable=False)
+    reacts = db.relationship('UserReact', backref='post', lazy=True, cascade="all, delete-orphan") #not sure yet
+    
     def toDict(self):
         return{
             'id': self.id,
-            'studentId': self.studentId,
-            'stream': self.stream,
-            'created': self.created.strftime("%m/%d/%Y, %H:%M:%S")
+            'text': self.text,
+            'react': self.created.strftime("%m/%d/%Y, %H:%M:%S")
         }
