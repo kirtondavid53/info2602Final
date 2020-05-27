@@ -19,14 +19,6 @@ class User(UserMixin, db.Model):
         "email": self.email,
         "password": self.password
       }
-
-    def toDict(self):
-      return {
-        "id": self.id,
-        "username": self.username,
-        "email": self.email,
-        "password": self.password
-      }
     
     def set_password(self, password):
         """Create hashed password."""
