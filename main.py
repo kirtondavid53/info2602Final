@@ -12,6 +12,7 @@ from datetime import timedelta
 from models import db, User , Post, UserReact #add application models
 
 ''' login form'''
+#Login form taken for INFO2602 lab 6
 class LogIn(FlaskForm):
   username = StringField('username', validators=[InputRequired()])
   password = PasswordField('New Password', validators=[InputRequired()])
