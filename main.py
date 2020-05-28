@@ -129,7 +129,7 @@ def update_post(id):
 
   else:
     oldReact.react = react
-    flash('You change your react')
+    flash('You changed your react')
     db.session.add(oldReact)
     db.session.commit()
 
