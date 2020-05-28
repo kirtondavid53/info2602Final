@@ -36,9 +36,13 @@
                             <br/>
                                   <div class="row">
                                   <div class="col">
+                                    {% if  %}
                                     likes: {{tLikes}}
                                   </div>
-                                  <div class="input-field s6 col s3">
+                                  <div class="col">
+                                    dislikes: {{tDislikes}}
+                                  </div>
+                                  <div class="col s3 input-field s6 ">
                                   <form id="postForm{{post.id}}" method="POST" action="updatePost/{{post.id}}">  
                                 
                                   <select name="react" type="submit" class="browser-default waves-effect waves-light btn" onchange="postForm{{post.id}}.submit()" >

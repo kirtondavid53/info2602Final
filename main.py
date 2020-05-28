@@ -76,14 +76,15 @@ def index():
 @app.route('/app', methods=['GET'])
 @login_required
 def client_app():
-  #post = Post.query.filter_by(userid=current_user.id).first()
-  #totalLikes = post.getTotalLikes()
-  users = User.query.all()
-  for user in users:
-   posts = Post.query.filter_by().all()
-   for post in posts:
-    totalLikes = post.getTotalLikes()
-  return render_template('app.html', posts=posts)
+
+  posts = Post.query.all()
+  results = []
+  for post in posts:
+    rec = post.toDict() # convert post object to dictionary record
+    rec['num_likes'] = post.getTotalLikes # add num likes to dictionary record
+    rec['num_dislikes'] = post.getTotalDislikes # add dislikes to dictionary record
+    results.append(rec)
+  return render_template('app.html', posts=posts, results=results, results=results)
 
 
 @app.route('/createPost', methods=['POST'])
@@ -112,16 +113,25 @@ def delete_post(id):
 def update_post(id):
   react = request.form.get('react') # either 'like' or 'dislike'
   print(react)
-  userReact = UserReact(react=react, userid=current_user.id,postid=id)
-  if userReact == None:
-    flash('Invalid id or unauthorized') 
-  
-  if react == 'like':
-    flash('You liked a post')
-  elif react == 'dislike':
-    flash('You dislikes a post')
-  db.session.add(userReact)
-  db.session.commit()
+  oldReact = UserReact.query.filter_by(userid=current_user.id,postid=id).first()
+  if oldReact == None:
+
+    userReact = UserReact(react=react, userid=current_user.id,postid=id)
+    if userReact == None:
+      flash('Invalid id or unauthorized') 
+    
+    if react == 'like':
+      flash('You liked a post')
+    elif react == 'dislike':
+      flash('You dislikes a post')
+    db.session.add(userReact)
+    db.session.commit()
+
+  else:
+    oldReact.react = react
+    flash('You change your react')
+    db.session.add(oldReact)
+    db.session.commit()
 
   return redirect(url_for('client_app'))
 

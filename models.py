@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    posts = db.relationship('Post', backref='user', lazy=True) # sets up a relationship to todos which references User
+    posts = db.relationship('Post', backref='user', lazy=True, cascade="all, delete-orphan") # sets up a relationship to todos which references User
 
     def toDict(self):
       return {
@@ -40,7 +40,7 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     text = db.Column(db.String(255), nullable=False)
-    reacts = db.relationship('UserReact', backref='post', lazy=True)
+    reacts = db.relationship('UserReact', backref='post', lazy=True, cascade="all, delete-orphan")
     
     def toDict(self):
         return{
@@ -55,3 +55,10 @@ class Post(db.Model):
             if react.react == 'like':
                 numLikes += 1
         return numLikes
+    
+    def getTotalDislikes(self):
+        numDislikes = 0
+        for react in self.reacts:
+            if react.react == 'dislike':
+                numDislikes += 1
+        return numDislikes
