@@ -1,4 +1,7 @@
 import json
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField, TextAreaField, SubmitField
+from wtforms.validators import InputRequired, EqualTo, Email
 from flask_cors import CORS
 from flask_login import LoginManager, current_user, login_user, login_required
 from flask import Flask, request, render_template, redirect, flash, url_for
@@ -6,8 +9,16 @@ from flask_jwt import JWT, jwt_required, current_identity
 from sqlalchemy.exc import IntegrityError
 from datetime import timedelta 
 
-from models import db, User , Post, UserReact#add application models
-from forms import LogIn
+from models import db, User , Post, UserReact #add application models
+
+''' login form'''
+class LogIn(FlaskForm):
+  username = StringField('username', validators=[InputRequired()])
+  password = PasswordField('New Password', validators=[InputRequired()])
+  submit = SubmitField('Login', render_kw={'class': 'btn waves-effect waves-light white-text'})
+''' end login form'''
+
+
 ''' Begin boilerplate code '''
 
 ''' Begin Flask Login Functions '''
@@ -17,6 +28,7 @@ def load_user(user_id):
   return User.query.get(user_id)
 
 ''' End Flask Login Functions '''
+
 
 def create_app():
   app = Flask(__name__, static_url_path='')
