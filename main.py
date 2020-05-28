@@ -84,7 +84,7 @@ def client_app():
     rec['num_likes'] = post.getTotalLikes # add num likes to dictionary record
     rec['num_dislikes'] = post.getTotalDislikes # add dislikes to dictionary record
     results.append(rec)
-  return render_template('app.html', posts=posts, results=results, results=results)
+  return render_template('app.html', posts=posts, results=results)
 
 
 @app.route('/createPost', methods=['POST'])

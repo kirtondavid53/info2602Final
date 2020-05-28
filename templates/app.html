@@ -36,11 +36,18 @@
                             <br/>
                                   <div class="row">
                                   <div class="col">
-                                    {% if  %}
-                                    likes: {{tLikes}}
+                                    {% for result in results %}
+                                      {% if result.id == post.id %}
+                                        likes: {{result.numlikes}}
+                                      {% endif %}
+                                    {% endfor %}
                                   </div>
                                   <div class="col">
-                                    dislikes: {{tDislikes}}
+                                    {% for result in results %}
+                                      {% if result.id == post.id %}
+                                        dislikes: {{result.dislikes}}
+                                      {% endif %}
+                                    {% endfor %}
                                   </div>
                                   <div class="col s3 input-field s6 ">
                                   <form id="postForm{{post.id}}" method="POST" action="updatePost/{{post.id}}">  
