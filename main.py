@@ -64,11 +64,11 @@ def index():
 @app.route('/app', methods=['GET'])
 @login_required
 def client_app():
-  
+  post = Post.query.filter_by(userid=current_user.id).first()
+  totalLikes = post.getTotalLikes()
   users = User.query.all()
   for user in users:
    posts = Post.query.filter_by().all()
-   
   return render_template('app.html', posts=posts)
 
 
@@ -91,6 +91,20 @@ def delete_post(id):
   db.session.delete(post) # delete the object
   db.session.commit()
   flash ('Deleted!')
+  return redirect(url_for('client_app'))
+
+@app.route('/updatePost/<id>', methods=['POST'])
+@login_required
+def update_post(id):
+  react = request.form.get('react') # either 'on' or 'None'
+  post = Post.query.filter_by(userid=current_user.id, id=id).first()
+  if post == 'like':
+    flash('You liked a post')
+  elif post == 'dislike':
+    flash('You dislikes a post')
+  db.session.add(post)
+  db.session.commit()
+
   return redirect(url_for('client_app'))
 
 if __name__ == '__main__':

@@ -34,25 +34,30 @@
                           
                         
                             <br/>
-                            <div class="row">
+                                  <div class="row">
+                                  <div class="col">
+                                    likes: {{tLikes}}
+                                  </div>
+                                  <div class="input-field s6 col s3">
+                                  <form id="postForm{{post.id}}" method="POST" action="updatePost/{{post.id}}">  
+                                
+                                  <select type="submit" class="browser-default waves-effect waves-light btn" onchange="postForm{{post.id}}.submit()" >
+                                    <option value="">Like or dislike</option>
+                                    <option name="like" value="like">Like</option>
+                                    <option value="dislike">Dislike</option>
+                                  </select>
+                                  </form>
+                                
+                                  </div>
+                                {% if current_user.username == post.user.username %}
+                                 <div class="col s3">
+                                  <a class="btn" href="/deletePost/{{post.id}}">DELETE</a>
+                                 </div>
+                              {% endif %}
                               
-                              <form name="react" id="react" method="POST" action="">  
-                            <div class="input-field s6 col s3">
-                              <select class="browser-default waves-effect waves-light btn">
-                                <option value="">Like or dislike</option>
-                                <option value="like">Like</option>
-                                <option value="dislike">Dislike</option>
-                              </select>
-                              </form>
                             </div>
-                              
-                            {% if current_user.username == post.user.username %}
-                            <div class="col s3">
-                              <a class="btn" href="/deletePost/{{post.id}}">DELETE</a>
-                            </div>
-                          {% endif %}
-                          </div>
-                        
+                          
+                    </li>
                 {% endfor %}
             {% endif %}
         </ul>  

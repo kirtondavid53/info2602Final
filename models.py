@@ -49,6 +49,10 @@ class Post(db.Model):
             'text': self.text,
             'reacts': self.reacts
         }
-        
-    def getTotalLikes():
-        pass
+
+    def getTotalLikes(self):
+        numLikes = 0
+        for react in self.reacts:
+            if react.react == 'like':
+                numLikes += 1
+        return numLikes
