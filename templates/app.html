@@ -38,14 +38,14 @@
                                   <div class="col">
                                     {% for result in results %}
                                       {% if result.id == post.id %}
-                                        likes: {{result.numlikes}}
+                                        likes: {{result.num_likes}}
                                       {% endif %}
                                     {% endfor %}
                                   </div>
                                   <div class="col">
                                     {% for result in results %}
                                       {% if result.id == post.id %}
-                                        dislikes: {{result.dislikes}}
+                                        dislikes: {{result.num_dislikes}}
                                       {% endif %}
                                     {% endfor %}
                                   </div>
