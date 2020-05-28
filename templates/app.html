@@ -41,8 +41,8 @@
                                   <div class="input-field s6 col s3">
                                   <form id="postForm{{post.id}}" method="POST" action="updatePost/{{post.id}}">  
                                 
-                                  <select type="submit" class="browser-default waves-effect waves-light btn" onchange="postForm{{post.id}}.submit()" >
-                                    <option value="">Like or dislike</option>
+                                  <select name="react" type="submit" class="browser-default waves-effect waves-light btn" onchange="postForm{{post.id}}.submit()" >
+                                    <option value="none">Like or dislike</option>
                                     <option name="like" value="like">Like</option>
                                     <option value="dislike">Dislike</option>
                                   </select>

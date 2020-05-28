@@ -32,10 +32,9 @@ class User(UserMixin, db.Model):
         return '<User {}>'.format(self.username)
 
 class UserReact(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    postid = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    react = db.Column(db.String(80), unique=True, nullable=True)
+    userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, primary_key=True)
+    postid = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False, primary_key=True)
+    react = db.Column(db.String(80), nullable=True)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
