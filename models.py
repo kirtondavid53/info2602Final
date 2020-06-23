@@ -36,6 +36,13 @@ class UserReact(db.Model):
     postid = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False, primary_key=True)
     react = db.Column(db.String(80), nullable=True)
 
+    def toDict(self):
+        return{
+            'userid': self.userid,
+            'postid': self.postid,
+            'react': self.react
+        }
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

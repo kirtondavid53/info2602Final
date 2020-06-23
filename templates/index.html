@@ -1,30 +1,31 @@
-{% extends "layout.html" %}
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf%}
+
 {% block title %}Login{% endblock %}
-{% block page %}Login{% endblock %}
 
 {{ super() }}
 
 {% block content %}
-<!--taken from INFO2602 lab 6-->
-   <div class="row">
-      
-        <form class="col s12 m8 offset-m2" method="POST" action="/">
-            {{ form.csrf_token }}
-
-            <div class="input-field col s12 m8 offset-m2"> 
-              {{ form.username(size=20, class="validate") }}
-              {{ form.username.label }}
-            </div>
-
-            <div class="input-field col s12 m8 offset-m2">
-              {{ form.password(size=20, class="validate") }}
-              {{ form.password.label }}
-            </div>
-
-            <div class="input-field col s12 m8 offset-m2">
-              {{form.submit}}
-            </div> 
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand mx-auto" href="#">Login</a>
+  </nav>
+  <div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <h5>{{ message }}</h5>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="row justify-content-md-center">
+        <form class="col-md-4" method="POST" action="/">
+            <h2 class="form-signin-heading">Please sign in</h2>
+           
+                {{ form.hidden_tag() }}
+                {{ wtf.form_field(form.username) }}
+                {{ wtf.form_field(form.password) }}
+                <button class="btn btn-primary" type="submit">Login</button>  
         </form>
-      
-  </div>
+    </div>
+  </div> <!-- /container -->
 {% endblock %}

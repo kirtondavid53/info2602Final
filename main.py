@@ -7,15 +7,16 @@ from flask_login import LoginManager, current_user, login_user, login_required
 from flask import Flask, request, render_template, redirect, flash, url_for
 from flask_jwt import JWT, jwt_required, current_identity
 from sqlalchemy.exc import IntegrityError
-from datetime import timedelta 
+from datetime import timedelta
+from flask_bootstrap import Bootstrap 
 
 from models import db, User , Post, UserReact #add application models
 
 ''' login form'''
 #Login form taken for INFO2602 lab 6
 class LogIn(FlaskForm):
-  username = StringField('username', validators=[InputRequired()])
-  password = PasswordField('New Password', validators=[InputRequired()])
+  username = StringField('Username', validators=[InputRequired()])
+  password = PasswordField('Password', validators=[InputRequired()])
   submit = SubmitField('Login', render_kw={'class': 'btn waves-effect waves-light white-text'})
 ''' end login form'''
 
@@ -37,7 +38,9 @@ def create_app():
   app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
   app.config['SECRET_KEY'] = "MYSECRET"
 #   app.config['JWT_EXPIRATION_DELTA'] = timedelta(days = 7) # uncomment if using flsk jwt
+  
   CORS(app)
+  Bootstrap(app)
   login_manager.init_app(app) # uncomment if using flask login
   db.init_app(app)
   return app
@@ -135,6 +138,16 @@ def update_post(id):
     db.session.commit()
 
   return redirect(url_for('client_app'))
+
+@app.route('/getreacts',methods=['GET'])
+@login_required
+def getrecipes():
+  posts = UserReact.query.all()
+  results = []
+  for post in posts:
+    rec = post.toDict()
+    results.append(rec)
+  return json.dumps(results)
 
 if __name__ == '__main__':
     app.run(debug=True)
