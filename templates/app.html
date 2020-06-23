@@ -19,6 +19,7 @@
                 <textarea name="text" class="form-control" aria-label="With textarea"></textarea>
               </div><br/>
               <input class="btn btn-primary" type="submit" value="ADD POST" />
+              
             </form>
           </div>
         </div>
@@ -60,13 +61,13 @@
                                     {% endfor %}
                                     
                               </div>
+                              
                         
                         <div class="p-2 flex-fill">
                                   <form id="postForm{{post.id}}" method="POST" action="updatePost/{{post.id}}">  
-                                
                                   <select id="mySelect" name="react" type="submit" class="form-control" onchange="postForm{{post.id}}.submit()" >
                                     <option value="none">Like or dislike</option>
-                                    <option name="like" value="like">Like</option>
+                                    <option value="like">Like</option>
                                     <option value="dislike">Dislike</option>
                                   </select>
                                   </form>
