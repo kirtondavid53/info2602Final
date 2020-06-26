@@ -68,14 +68,21 @@
                               
                         
                         <div class="p-2 flex-fill">
-                                  <form id="postForm{{post.id}}" method="POST" action="updatePost/{{post.id}}">  
-                                  <select id="mySelect" name="react" type="submit" class="form-control" onchange="postForm{{post.id}}.submit()" >
-                                    <option value="none">Like or dislike</option>
-                                    <option value="like">Like</option>
-                                    <option value="dislike">Dislike</option>
-                                  </select>
+                                  <form id="postForm{{post.id}}" method="POST" action="updatePost/{{post.id}}">
+                                  
+                                   {% for rec in post.reacts%} 
+                                    {% if (rec.userid == current_user.id) and (rec.postid == post.id) %} 
+                                  
+                                      <select id="mySelect" name="react" type="submit" class="form-control" onchange="postForm{{post.id}}.submit()" >
+                                        <option value="none">Like or dislike</option>
+                                        <option value="like" {% if rec.react == "like" %} selected="selected" {% endif %}>Like</option>
+                                        <option value="dislike" {% if rec.react == "dislike" %} selected="selected" {% endif %}>Dislike</option>
+                                      </select>
+
+                                    {% endif %}
+                                  {% endfor %} 
                                   </form>
-                                
+                                   
                                   </div>
                                 {% if current_user.username == post.user.username %}
                                 <div class="p-2 flex-fill">
