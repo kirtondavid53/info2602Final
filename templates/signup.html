@@ -1,0 +1,43 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block styles %}
+{{super()}}
+<link rel="stylesheet" href="{{url_for('.static', filename='styles.css')}}">
+{% endblock %}
+
+{% block content %}
+
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand mx-auto" href="#">Sign Up</a>
+    <ul class="navbar-nav">
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+        {% endif %}
+      </ul>
+  </nav>
+  <div class="container">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <h5>{{ message }}</h5>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="row justify-content-md-center">
+  <form class="col-md-4" method="POST" action="/signup">
+    {{ form.hidden_tag() }}
+    {{ wtf.form_field(form.username) }}
+    {{ wtf.form_field( form.email) }}
+    {{ wtf.form_field(form.password) }}
+    {{ wtf.form_field(form.confirm) }}
+    <button class="btn btn-primary" type="submit">Signup</button>
+  </form>
+  </div>
+
+</div> <!-- /container -->
+{% endblock %}

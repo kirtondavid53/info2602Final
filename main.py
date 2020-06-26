@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, TextAreaField, SubmitField
 from wtforms.validators import InputRequired, EqualTo, Email
 from flask_cors import CORS
-from flask_login import LoginManager, current_user, login_user, login_required
+from flask_login import LoginManager, current_user, login_user, login_required, logout_user
 from flask import Flask, request, render_template, redirect, flash, url_for
 from flask_jwt import JWT, jwt_required, current_identity
 from sqlalchemy.exc import IntegrityError
@@ -11,6 +11,14 @@ from datetime import timedelta
 from flask_bootstrap import Bootstrap 
 
 from models import db, User , Post, UserReact #add application models
+
+''' Signup form'''
+class SignUp(FlaskForm):
+  username = StringField('username', validators=[InputRequired()])
+  email = StringField('email', validators=[Email(), InputRequired()])
+  password = PasswordField('New Password', validators=[InputRequired(), EqualTo('confirm', message='Passwords must match')])
+  confirm  = PasswordField('Repeat Password')
+''' end Signup form'''
 
 ''' login form'''
 #Login form taken for INFO2602 lab 6
@@ -76,6 +84,19 @@ def index():
       flash('Invalid username or password') # send message to next page
       return redirect(url_for('index')) # redirect to login page if login unsuccessful
   return render_template('index.html', form=form)
+
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+  form = SignUp() # create form object
+  if form.validate_on_submit():
+    data = request.form # get data from form submission
+    newuser = User(username=data['username'], email=data['email']) # create user object
+    newuser.set_password(data['password']) # set password
+    db.session.add(newuser) # save new user
+    db.session.commit()
+    flash('Account Created!')# send message
+    return redirect(url_for('index'))# redirect to login page
+  return render_template('signup.html', form=form) # pass form object to template
 
 @app.route('/app', methods=['GET'])
 @login_required
@@ -148,6 +169,12 @@ def getrecipes():
     rec = post.toDict()
     results.append(rec)
   return json.dumps(results)
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
